@@ -2,12 +2,14 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:cowin_app/storage/localStorage.dart';
+import 'package:cowin_app/utils/utilFunctions.dart';
 import 'package:http/http.dart' as http;
 
 String _baseUrl = 'cdn-api.co-vin.in';
 
 String _genOtp = 'auth/generateMobileOTP';
 String _conOtp = 'auth/validateMobileOtp';
+String _beneficiaries = 'appointment/beneficiaries';
 
 Uri genUrl(String url) {
   return Uri.https(_baseUrl, 'api/v2/' + url);
@@ -16,6 +18,8 @@ Uri genUrl(String url) {
 final _headers = {
   HttpHeaders.contentTypeHeader: "application/json",
   HttpHeaders.acceptHeader: "application/json",
+  HttpHeaders.authorizationHeader:
+      "Bearer " + (isTokenValid ? ls.getMap('token') : "")
 };
 
 Future<bool> generateOtp(int mobileNumber) async {
@@ -52,6 +56,20 @@ Future<dynamic> confirmOtp(String otp) async {
     print(res.body);
     await ls.setMap('token_time', DateTime.now().toString());
     return await ls.setMap('token', json.decode(res.body)['token']);
+  } catch (e) {
+    Future.error(e);
+  }
+}
+
+Future<dynamic> getMembers() async {
+  try {
+    http.Response res = await http.get(
+      genUrl(_beneficiaries),
+      headers: _headers,
+    );
+
+    print(res.body);
+    return json.decode(res.body);
   } catch (e) {
     Future.error(e);
   }

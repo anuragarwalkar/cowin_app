@@ -22,6 +22,13 @@ class LocalStorage {
 
     return null;
   }
+
+  void removeToken() {
+    if (_prefs != null) {
+      _prefs.remove('token');
+      _prefs.remove('token_time');
+    }
+  }
 }
 
 LocalStorage ls = LocalStorage();

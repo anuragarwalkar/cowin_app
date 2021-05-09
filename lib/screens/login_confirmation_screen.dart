@@ -75,7 +75,7 @@ class _LoginConfirmationScreenState extends State<LoginConfirmationScreen> {
         title: Text('Confirm OTP'),
       ),
       body: Container(
-        padding: EdgeInsets.all(50),
+        padding: EdgeInsets.all(30),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,

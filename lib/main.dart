@@ -1,6 +1,6 @@
+import 'package:cowin_app/screens/first_screen.dart';
 import 'package:cowin_app/screens/home_screen.dart';
 import 'package:cowin_app/screens/login_confirmation_screen.dart';
-import 'package:cowin_app/screens/login_screen.dart';
 import 'package:cowin_app/storage/localStorage.dart';
 import 'package:cowin_app/utils/utilFunctions.dart';
 import 'package:flutter/material.dart';
@@ -9,7 +9,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await ls.init();
   String initialRoute =
-      isTokenValid ? HomeScreen.routeName : LoginScreen.routeName;
+      isTokenValid ? HomeScreen.routeName : FirstScreen.routeName;
   runApp(MyApp(initialRoute));
 }
 
@@ -27,7 +27,7 @@ class MyApp extends StatelessWidget {
       ),
       initialRoute: initalRoute,
       routes: {
-        LoginScreen.routeName: (ctx) => LoginScreen(),
+        FirstScreen.routeName: (ctx) => FirstScreen(),
         LoginConfirmationScreen.routeName: (ctx) => LoginConfirmationScreen(),
         HomeScreen.routeName: (ctx) => HomeScreen()
       },

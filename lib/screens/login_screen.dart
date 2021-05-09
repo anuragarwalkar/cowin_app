@@ -23,40 +23,39 @@ class _LoginScreenState extends State<LoginScreen> {
   _onLogin() async {
     if (_formKey.currentState.validate()) {
       print(phoneNumber.value.text);
-      var res = await generateOtp(int.parse(phoneNumber.value.text));
+      try {
+        var res = await generateOtp(int.parse(phoneNumber.value.text));
 
-      if (res) {
-        Navigator.of(context).pushNamed(LoginConfirmationScreen.routeName);
+        if (res) {
+          Navigator.of(context).pushNamed(LoginConfirmationScreen.routeName);
+        }
+      } catch (e) {
+        print(e);
       }
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Login'),
-      ),
-      body: Container(
-        padding: EdgeInsets.all(30),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              TextFormField(
-                validator: (val) => _validator(val),
-                controller: phoneNumber,
-                decoration: InputDecoration(
-                  labelText: 'Your Phone Number',
-                  icon: Icon(Icons.phone),
-                  hintText: 'Your Mobile',
-                ),
-                keyboardType: TextInputType.number,
+    return Container(
+      padding: EdgeInsets.all(30),
+      child: Form(
+        key: _formKey,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            TextFormField(
+              validator: (val) => _validator(val),
+              controller: phoneNumber,
+              decoration: InputDecoration(
+                labelText: 'Your Phone Number',
+                icon: Icon(Icons.phone),
+                hintText: 'Your Mobile',
               ),
-              ElevatedButton(onPressed: _onLogin, child: Text('Login'))
-            ],
-          ),
+              keyboardType: TextInputType.number,
+            ),
+            ElevatedButton(onPressed: _onLogin, child: Text('Login')),
+          ],
         ),
       ),
     );

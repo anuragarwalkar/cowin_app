@@ -5,7 +5,12 @@ get isTokenValid {
 
   if (savedTokenDate != null) {
     DateTime savedDate = DateTime.parse(savedTokenDate);
-    return DateTime.now().difference(savedDate).inMinutes <= 10;
+    bool isValid = DateTime.now().difference(savedDate).inMinutes <= 10;
+    if (isValid) {
+      return isValid;
+    } else {
+      ls.removeToken();
+    }
   }
 
   return false;
