@@ -9,7 +9,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await ls.init();
   String initialRoute =
-      isTokenValid ? HomeScreen.routeName : FirstScreen.routeName;
+      await isTokenValid ? HomeScreen.routeName : FirstScreen.routeName;
   runApp(MyApp(initialRoute));
 }
 

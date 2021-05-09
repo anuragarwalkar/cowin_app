@@ -1,6 +1,6 @@
 import 'package:cowin_app/storage/localStorage.dart';
 
-get isTokenValid {
+get isTokenValid async {
   String savedTokenDate = ls.getMap('token_time');
 
   if (savedTokenDate != null) {

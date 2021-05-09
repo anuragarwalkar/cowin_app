@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:cowin_app/storage/localStorage.dart';
-import 'package:cowin_app/utils/utilFunctions.dart';
 import 'package:http/http.dart' as http;
 
 String _baseUrl = 'cdn-api.co-vin.in';
@@ -15,12 +14,15 @@ Uri genUrl(String url) {
   return Uri.https(_baseUrl, 'api/v2/' + url);
 }
 
-final _headers = {
-  HttpHeaders.contentTypeHeader: "application/json",
-  HttpHeaders.acceptHeader: "application/json",
-  HttpHeaders.authorizationHeader:
-      "Bearer " + (isTokenValid ? ls.getMap('token') : "")
-};
+get _headers {
+  String savedToken = ls.getMap('token');
+  String token = "Bearer " + (savedToken != null ? savedToken : "");
+  return {
+    HttpHeaders.contentTypeHeader: "application/json",
+    HttpHeaders.acceptHeader: "application/json",
+    HttpHeaders.authorizationHeader: token
+  };
+}
 
 Future<bool> generateOtp(int mobileNumber) async {
   print(mobileNumber);
@@ -53,9 +55,13 @@ Future<dynamic> confirmOtp(String otp) async {
       ),
     );
 
-    print(res.body);
+    print((res.body));
+    Map parsedRes = json.decode(res.body);
+    if (parsedRes['error'] != null) {
+      return Future.error(parsedRes['error']);
+    }
     await ls.setMap('token_time', DateTime.now().toString());
-    return await ls.setMap('token', json.decode(res.body)['token']);
+    return await ls.setMap('token', parsedRes['token']);
   } catch (e) {
     Future.error(e);
   }
@@ -67,8 +73,11 @@ Future<dynamic> getMembers() async {
       genUrl(_beneficiaries),
       headers: _headers,
     );
-
+    if (res.statusCode != 200) {
+      return Future.error(res.body);
+    }
     print(res.body);
+
     return json.decode(res.body);
   } catch (e) {
     Future.error(e);

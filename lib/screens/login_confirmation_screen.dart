@@ -20,7 +20,7 @@ class _LoginConfirmationScreenState extends State<LoginConfirmationScreen> {
   StreamController<ErrorAnimationType> _errorController;
   bool _hasError = false;
 
-  String _errorMessage;
+  // String _errorMessage;
   Digest _otp;
 
   @override
@@ -36,7 +36,6 @@ class _LoginConfirmationScreenState extends State<LoginConfirmationScreen> {
     var bytes = utf8.encode(text); // data being hashed
 
     var digest = sha256.convert(bytes);
-    print(digest);
     this.setState(() {
       _hasError = false;
       _otp = digest;

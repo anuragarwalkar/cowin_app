@@ -9,7 +9,7 @@ class LocalStorage {
 
   Future<bool> setMap(String key, String value) async {
     if (_prefs != null) {
-      return _prefs.setString(key, value);
+      return await _prefs.setString(key, value);
     }
 
     return null;
@@ -23,10 +23,10 @@ class LocalStorage {
     return null;
   }
 
-  void removeToken() {
+  void removeToken() async {
     if (_prefs != null) {
-      _prefs.remove('token');
-      _prefs.remove('token_time');
+      await _prefs.remove('token');
+      await _prefs.remove('token_time');
     }
   }
 }
