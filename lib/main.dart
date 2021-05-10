@@ -9,11 +9,8 @@ import 'package:flutter/material.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await ls.init();
-  String initialRoute = await isTokenValid
-      ? HomeScreen.routeName
-      : ls.getInt('phone') != null
-          ? LoginConfirmationScreen.routeName
-          : FirstScreen.routeName;
+  String initialRoute =
+      await isTokenValid ? HomeScreen.routeName : FirstScreen.routeName;
   runApp(MyApp(initialRoute));
 }
 

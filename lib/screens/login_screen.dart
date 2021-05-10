@@ -12,7 +12,8 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
-  TextEditingController phoneNumber = TextEditingController();
+  TextEditingController phoneNumber =
+      TextEditingController(text: ls.getInt('phone').toString());
 
   _validator(dynamic text) {
     if (text.length < 10) {

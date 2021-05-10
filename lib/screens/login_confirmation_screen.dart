@@ -5,6 +5,7 @@ import 'package:cowin_app/http/appHttp.dart';
 import 'package:cowin_app/screens/first_screen.dart';
 import 'package:cowin_app/screens/home_screen.dart';
 import 'package:cowin_app/storage/localStorage.dart';
+import 'package:cowin_app/utils/colors.dart';
 import 'package:cowin_app/widgets/appPinCodeFields.dart';
 import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
@@ -24,6 +25,32 @@ class _LoginConfirmationScreenState extends State<LoginConfirmationScreen> {
 
   // String _errorMessage;
   Digest _otp;
+  int _counter = 180;
+  Timer _timer;
+
+  void _startTimer() {
+    if (_timer != null) {
+      _timer.cancel();
+    }
+    setState(() {
+      _hasError = false;
+    });
+
+    _counter = 180;
+
+    _timer = Timer.periodic(Duration(seconds: 1), (timer) {
+      setState(() {
+        if (_counter > 0) {
+          _counter--;
+        } else {
+          if (_timer != null) {
+            _timer.cancel();
+            _hasError = true;
+          }
+        }
+      });
+    });
+  }
 
   @override
   void dispose() {
@@ -53,12 +80,13 @@ class _LoginConfirmationScreenState extends State<LoginConfirmationScreen> {
 
   @override
   void initState() {
-    _getnerateOtp();
+    _startTimer();
     _errorController = StreamController<ErrorAnimationType>();
     super.initState();
   }
 
   _getnerateOtp() async {
+    _startTimer();
     int phone = ls.getInt('phone');
 
     if (phone != null && !ls.getIsLoginGen()) {
@@ -86,6 +114,7 @@ class _LoginConfirmationScreenState extends State<LoginConfirmationScreen> {
         .pushNamedAndRemoveUntil(FirstScreen.routeName, (route) => false);
   }
 
+// 180 seconds
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -109,7 +138,9 @@ class _LoginConfirmationScreenState extends State<LoginConfirmationScreen> {
               Column(mainAxisAlignment: MainAxisAlignment.center, children: [
                 Text(ls.getInt('phone').toString()),
                 TextButton(
-                    onPressed: _navigateToLogin, child: Text('Edit Phone')),
+                  onPressed: _navigateToLogin,
+                  child: Text('Edit Phone'),
+                ),
               ]),
             SizedBox(
               height: 50,
@@ -121,8 +152,12 @@ class _LoginConfirmationScreenState extends State<LoginConfirmationScreen> {
               onCompleted: _onCompleted,
               hasError: _hasError,
             ),
+            Text(
+              _counter.toString(),
+              style: TextStyle(color: appPrimaryColor),
+            ),
             SizedBox(
-              height: 50,
+              height: 30,
             ),
             ElevatedButton(
               onPressed: _confirmOtp,

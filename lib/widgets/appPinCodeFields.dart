@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:cowin_app/utils/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 
@@ -31,9 +32,11 @@ class AppPinCodeFields extends StatelessWidget {
         fieldHeight: 70,
         fieldWidth: 50,
         activeFillColor: Colors.white,
-        inactiveFillColor: hasError ? Colors.red.shade100 : Colors.white,
         inactiveColor: Colors.grey.shade400,
         selectedFillColor: Colors.white,
+        activeColor: appPrimaryColor,
+        inactiveFillColor: hasError ? Colors.red.shade100 : Colors.white,
+        selectedColor: appPrimaryColor,
       ),
       autovalidateMode: AutovalidateMode.onUserInteraction,
       animationDuration: Duration(milliseconds: 300),
