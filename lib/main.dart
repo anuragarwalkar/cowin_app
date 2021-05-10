@@ -2,14 +2,18 @@ import 'package:cowin_app/screens/first_screen.dart';
 import 'package:cowin_app/screens/home_screen.dart';
 import 'package:cowin_app/screens/login_confirmation_screen.dart';
 import 'package:cowin_app/storage/localStorage.dart';
+import 'package:cowin_app/utils/colors.dart';
 import 'package:cowin_app/utils/utilFunctions.dart';
 import 'package:flutter/material.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await ls.init();
-  String initialRoute =
-      await isTokenValid ? HomeScreen.routeName : FirstScreen.routeName;
+  String initialRoute = await isTokenValid
+      ? HomeScreen.routeName
+      : ls.getInt('phone') != null
+          ? LoginConfirmationScreen.routeName
+          : FirstScreen.routeName;
   runApp(MyApp(initialRoute));
 }
 
@@ -23,7 +27,8 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: title,
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: colorCustom,
+        fontFamily: 'Lato',
       ),
       initialRoute: initalRoute,
       routes: {

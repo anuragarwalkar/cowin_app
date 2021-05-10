@@ -15,9 +15,25 @@ class LocalStorage {
     return null;
   }
 
+  Future<bool> setInt(String key, int value) async {
+    if (_prefs != null) {
+      return await _prefs.setInt(key, value);
+    }
+
+    return null;
+  }
+
   String getMap(String key) {
     if (_prefs != null) {
       return _prefs.getString(key);
+    }
+
+    return null;
+  }
+
+  int getInt(String key) {
+    if (_prefs != null) {
+      return _prefs.getInt(key);
     }
 
     return null;

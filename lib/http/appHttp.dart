@@ -17,9 +17,10 @@ Uri genUrl(String url) {
 get _headers {
   String savedToken = ls.getMap('token');
   String token = "Bearer " + (savedToken != null ? savedToken : "");
+  String applicationJson = "application/json";
   return {
-    HttpHeaders.contentTypeHeader: "application/json",
-    HttpHeaders.acceptHeader: "application/json",
+    HttpHeaders.contentTypeHeader: applicationJson,
+    HttpHeaders.acceptHeader: applicationJson,
     HttpHeaders.authorizationHeader: token
   };
 }
@@ -61,7 +62,7 @@ Future<dynamic> confirmOtp(String otp) async {
       return Future.error(parsedRes['error']);
     }
     await ls.setMap('token_time', DateTime.now().toString());
-    return await ls.setMap('token', parsedRes['token']);
+    await ls.setMap('token', parsedRes['token']);
   } catch (e) {
     Future.error(e);
   }

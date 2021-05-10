@@ -20,11 +20,6 @@ class _FirstScreenState extends State<FirstScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          _selectedPageIndex == 0 ? 'Login/Register' : 'Available Slots',
-        ),
-      ),
       body: _selectedPageIndex == 0 ? LoginScreen() : AvailableSlots(),
       bottomNavigationBar: AppBottomNavigationBar(
         selectPage: _selctPage,
