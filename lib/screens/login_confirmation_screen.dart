@@ -65,14 +65,10 @@ class _LoginConfirmationScreenState extends State<LoginConfirmationScreen> {
     }
   }
 
-  _confirmOtp({Digest otp}) async {
-    if (otp == null) {
-      otp = _otp;
-    }
-
-    if (otp != null) {
+  _confirmOtp() async {
+    if (_otp != null) {
       try {
-        var res = await confirmOtp(otp.toString());
+        var res = await confirmOtp(_otp.toString());
         if (res == true) {
           Navigator.of(context)
               .pushNamedAndRemoveUntil(HomeScreen.routeName, (route) => false);

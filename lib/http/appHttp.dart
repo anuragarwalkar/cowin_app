@@ -62,7 +62,7 @@ Future<dynamic> confirmOtp(String otp) async {
       return Future.error(parsedRes['error']);
     }
     await ls.setMap('token_time', DateTime.now().toString());
-    await ls.setMap('token', parsedRes['token']);
+    return await ls.setMap('token', parsedRes['token']);
   } catch (e) {
     Future.error(e);
   }
