@@ -58,6 +58,7 @@ class _LoginScreenState extends State<LoginScreen> {
             Text(
               'Register or SignIn for Vaccination',
               style: Theme.of(context).textTheme.headline5,
+              textAlign: TextAlign.center,
             ),
             SizedBox(
               height: 50,
