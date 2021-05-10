@@ -52,12 +52,17 @@ class _LoginConfirmationScreenState extends State<LoginConfirmationScreen> {
 
   @override
   void initState() {
-    int phone = ls.getInt('phone');
-    if (phone != null) {
-      // generateOtp(phone).then((value) => null);
-    }
+    _getnerateOtp();
     _errorController = StreamController<ErrorAnimationType>();
     super.initState();
+  }
+
+  _getnerateOtp() async {
+    int phone = ls.getInt('phone');
+
+    if (phone != null && !ls.getIsLoginGen()) {
+      await generateOtp(phone);
+    }
   }
 
   _confirmOtp({Digest otp}) async {
@@ -82,9 +87,6 @@ class _LoginConfirmationScreenState extends State<LoginConfirmationScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('OTP Verification'),
-      ),
       body: Container(
         padding: EdgeInsets.all(30),
         child: Column(
@@ -108,6 +110,9 @@ class _LoginConfirmationScreenState extends State<LoginConfirmationScreen> {
               onCompleted: _onCompleted,
               hasError: _hasError,
             ),
+            SizedBox(
+              height: 50,
+            ),
             ElevatedButton(
               onPressed: _confirmOtp,
               child: Padding(
@@ -118,9 +123,10 @@ class _LoginConfirmationScreenState extends State<LoginConfirmationScreen> {
                 child: Text('Confirm'),
               ),
             ),
-            SizedBox(
-              height: 50,
-            ),
+            TextButton(
+              onPressed: _getnerateOtp,
+              child: Text('Resend OTP'),
+            )
           ],
         ),
       ),

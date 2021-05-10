@@ -2,6 +2,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class LocalStorage {
   SharedPreferences _prefs;
+  bool _isLoginSscreen = false;
 
   init() async {
     return _prefs = await SharedPreferences.getInstance();
@@ -37,6 +38,14 @@ class LocalStorage {
     }
 
     return null;
+  }
+
+  setIsLogin() {
+    _isLoginSscreen = true;
+  }
+
+  bool getIsLoginGen() {
+    return _isLoginSscreen;
   }
 
   void removeToken() async {

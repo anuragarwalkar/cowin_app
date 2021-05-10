@@ -30,6 +30,7 @@ class _LoginScreenState extends State<LoginScreen> {
         var res = await generateOtp(phone);
         if (res) {
           await ls.setInt('phone', phone);
+          ls.setIsLogin();
           Navigator.of(context).pushNamed(LoginConfirmationScreen.routeName);
         }
       } catch (e) {
