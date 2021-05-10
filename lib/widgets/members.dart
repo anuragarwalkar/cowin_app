@@ -2,6 +2,7 @@ import 'package:cowin_app/http/appHttp.dart';
 import 'package:flutter/material.dart';
 
 class Members extends StatefulWidget {
+  Members({Key key}) : super(key: key);
   @override
   _MembersState createState() => _MembersState();
 }

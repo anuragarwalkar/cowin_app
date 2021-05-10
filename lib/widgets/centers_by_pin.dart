@@ -70,14 +70,21 @@ class _CentersByPinState extends State<CentersByPin> {
     );
   }
 
-  Widget _getAvalability(Map item) {
+  List<Widget> _getAvalability(Map item) {
     List sessions = item['sessions'];
     int slots = sessions.first['available_capacity'];
     String label = slots > 0 ? 'Oepn' : 'Booked';
-    return Chip(
-      label: Text(label),
-      backgroundColor: slots > 0 ? Colors.green : Colors.red,
-    );
+    return [
+      Chip(
+        label: Text(label),
+        backgroundColor: slots > 0 ? Colors.green : Colors.red,
+      ),
+      if (slots > 0)
+        Chip(
+          label: Text('Slots ${slots.toString()}'),
+          backgroundColor: Colors.green,
+        ),
+    ];
   }
 
   Widget _getVaccine(Map item) {
@@ -164,7 +171,7 @@ class _CentersByPinState extends State<CentersByPin> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
-                                _getAvalability(e),
+                                ..._getAvalability(e),
                               ],
                             ),
                           ),

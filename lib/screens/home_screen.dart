@@ -27,7 +27,11 @@ class _HomeScreenState extends State<HomeScreen> {
             ))
           : null,
       body: Container(
-        child: _selectedPageIndex == 0 ? Members() : AvailableSlots(),
+        child: _selectedPageIndex == 0
+            ? Members(
+                key: ValueKey('members-view'),
+              )
+            : AvailableSlots(key: ValueKey('available-slot-view')),
       ),
       bottomNavigationBar: AppBottomNavigationBar(
         isLoggedIn: true,

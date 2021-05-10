@@ -2,6 +2,7 @@ import 'package:cowin_app/widgets/centers_by_pin.dart';
 import 'package:flutter/material.dart';
 
 class AvailableSlots extends StatefulWidget {
+  AvailableSlots({Key key}) : super(key: key);
   @override
   _AvailableSlotsState createState() => _AvailableSlotsState();
 }
