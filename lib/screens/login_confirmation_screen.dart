@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:cowin_app/http/appHttp.dart';
+import 'package:cowin_app/screens/first_screen.dart';
 import 'package:cowin_app/screens/home_screen.dart';
 import 'package:cowin_app/storage/localStorage.dart';
 import 'package:cowin_app/widgets/appPinCodeFields.dart';
@@ -80,6 +81,11 @@ class _LoginConfirmationScreenState extends State<LoginConfirmationScreen> {
     }
   }
 
+  _navigateToLogin() {
+    Navigator.of(context)
+        .pushNamedAndRemoveUntil(FirstScreen.routeName, (route) => false);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -96,6 +102,15 @@ class _LoginConfirmationScreenState extends State<LoginConfirmationScreen> {
             Text(
               'You will get OTP via sms',
             ),
+            SizedBox(
+              height: 10,
+            ),
+            if (ls.getInt('phone') != null)
+              Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+                Text(ls.getInt('phone').toString()),
+                TextButton(
+                    onPressed: _navigateToLogin, child: Text('Edit Phone')),
+              ]),
             SizedBox(
               height: 50,
             ),
