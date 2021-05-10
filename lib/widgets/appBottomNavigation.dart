@@ -16,10 +16,13 @@ class AppBottomNavigationBar extends StatelessWidget {
       currentIndex: selectedPageIndex,
       items: [
         BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: isLoggedIn ? 'Members' : 'Register/Login'),
+          icon: Icon(Icons.person),
+          label: isLoggedIn ? 'Members' : 'Register/Login',
+        ),
         BottomNavigationBarItem(
-            icon: Icon(Icons.calendar_today), label: 'Avalable Slots'),
+          icon: Icon(Icons.calendar_today),
+          label: 'Available Slots',
+        ),
       ],
     );
   }
