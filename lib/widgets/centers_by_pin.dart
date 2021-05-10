@@ -38,7 +38,7 @@ class _CentersByPinState extends State<CentersByPin> {
             decoration: const InputDecoration(
               icon: Icon(Icons.pin_drop),
               hintText: 'Pin Code',
-              labelText: 'You 6 Digit Pin Code',
+              labelText: 'Your 6 Digit Pin Code',
             ),
             keyboardType: TextInputType.number,
             inputFormatters: <TextInputFormatter>[
