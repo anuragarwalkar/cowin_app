@@ -9,9 +9,14 @@ String _baseUrl = 'cdn-api.co-vin.in';
 String _genOtp = 'auth/generateMobileOTP';
 String _conOtp = 'auth/validateMobileOtp';
 String _beneficiaries = 'appointment/beneficiaries';
+String _calenderByPin = 'appointment/sessions/public/calendarByPin';
 
 Uri genUrl(String url) {
   return Uri.https(_baseUrl, 'api/v2/' + url);
+}
+
+Uri genUrlQueryParam(String url, Map<String, String> queryParam) {
+  return Uri.https(_baseUrl, 'api/v2/' + url, queryParam);
 }
 
 get _headers {
@@ -80,6 +85,23 @@ Future<dynamic> getMembers() async {
     print(res.body);
 
     return json.decode(res.body);
+  } catch (e) {
+    Future.error(e);
+  }
+}
+
+Future getCentersByPin(String pinCode, String date) async {
+  try {
+    http.Response res = await http.get(
+      genUrlQueryParam(_calenderByPin, {'pincode': pinCode, 'date': date}),
+      headers: _headers,
+    );
+    if (res.statusCode != 200) {
+      return Future.error(res.body);
+    }
+    print(res.body);
+
+    return json.decode(res.body)['centers'];
   } catch (e) {
     Future.error(e);
   }

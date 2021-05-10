@@ -1,3 +1,4 @@
+import 'package:cowin_app/widgets/centers_by_pin.dart';
 import 'package:flutter/material.dart';
 
 class AvailableSlots extends StatefulWidget {
@@ -25,12 +26,14 @@ class _AvailableSlotsState extends State<AvailableSlots> {
                 ),
               ],
             ),
-            title: Text('Vaccination Center and Slots Availability'),
+            title: Text('Vaccination Center'),
           ),
           body: TabBarView(
             children: [
-              Icon(Icons.directions_car),
-              Icon(Icons.directions_transit),
+              CentersByPin(),
+              Icon(
+                Icons.location_city,
+              ),
             ],
           ),
         ),
