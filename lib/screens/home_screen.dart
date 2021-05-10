@@ -20,10 +20,12 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-          title: Text(
-        _selectedPageIndex == 0 ? 'Members' : 'Avalable slots',
-      )),
+      appBar: _selectedPageIndex == 0
+          ? AppBar(
+              title: Text(
+              'Members',
+            ))
+          : null,
       body: Container(
         child: _selectedPageIndex == 0 ? Members() : AvailableSlots(),
       ),
