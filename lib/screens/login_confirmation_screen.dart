@@ -74,9 +74,7 @@ class _LoginConfirmationScreenState extends State<LoginConfirmationScreen> {
     return sha256.convert(bytes);
   }
 
-  void _onChanged(String text) {
-    print(text);
-  }
+  void _onChanged(String text) {}
 
   @override
   void initState() {
@@ -102,7 +100,6 @@ class _LoginConfirmationScreenState extends State<LoginConfirmationScreen> {
           Navigator.of(context)
               .pushNamedAndRemoveUntil(HomeScreen.routeName, (route) => false);
         }
-        print(res);
       } catch (e) {
         print(e);
       }

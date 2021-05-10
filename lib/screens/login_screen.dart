@@ -12,8 +12,8 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
-  TextEditingController phoneNumber =
-      TextEditingController(text: ls.getInt('phone').toString());
+  TextEditingController phoneNumber = TextEditingController(
+      text: ls.getInt('phone') != null ? ls.getInt('phone').toString() : null);
 
   _validator(dynamic text) {
     if (text.length < 10) {
@@ -25,7 +25,6 @@ class _LoginScreenState extends State<LoginScreen> {
 
   _onLogin() async {
     if (_formKey.currentState.validate()) {
-      print(phoneNumber.value.text);
       try {
         int phone = int.parse(phoneNumber.value.text);
         var res = await generateOtp(phone);

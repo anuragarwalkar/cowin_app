@@ -1,3 +1,4 @@
+import 'package:cowin_app/widgets/centers_by_district.dart';
 import 'package:cowin_app/widgets/centers_by_pin.dart';
 import 'package:flutter/material.dart';
 
@@ -32,9 +33,7 @@ class _AvailableSlotsState extends State<AvailableSlots> {
           body: TabBarView(
             children: [
               CentersByPin(),
-              Icon(
-                Icons.location_city,
-              ),
+              CentersByDistrict(),
             ],
           ),
         ),

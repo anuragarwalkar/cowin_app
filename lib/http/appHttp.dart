@@ -9,7 +9,10 @@ String _baseUrl = 'cdn-api.co-vin.in';
 String _genOtp = 'auth/generateMobileOTP';
 String _conOtp = 'auth/validateMobileOtp';
 String _beneficiaries = 'appointment/beneficiaries';
-String _calenderByPin = 'appointment/sessions/public/calendarByPin';
+String _findByPin = 'appointment/sessions/public/calendarByPin';
+String _getStates = 'admin/location/states';
+String _getDistrict(String stateId) => 'admin/location/districts/$stateId';
+String _findByDistrict = 'appointment/sessions/public/calendarByDistrict';
 
 Uri genUrl(String url) {
   return Uri.https(_baseUrl, 'api/v2/' + url);
@@ -31,7 +34,6 @@ get _headers {
 }
 
 Future<bool> generateOtp(int mobileNumber) async {
-  print(mobileNumber);
   Map reqBody = {
     "secret":
         "U2FsdGVkX1/Haasm5iWyBo3n3rDUbdRe+AUrekPbew2T8lpZBleL54n+TX1fd9Rr9xUs/aRKYcVtwcgdD8+zKw==",
@@ -61,7 +63,6 @@ Future<dynamic> confirmOtp(String otp) async {
       ),
     );
 
-    print((res.body));
     Map parsedRes = json.decode(res.body);
     if (parsedRes['error'] != null) {
       return Future.error(parsedRes['error']);
@@ -82,7 +83,6 @@ Future<dynamic> getMembers() async {
     if (res.statusCode != 200) {
       return Future.error(res.body);
     }
-    print(res.body);
 
     return json.decode(res.body);
   } catch (e) {
@@ -93,7 +93,57 @@ Future<dynamic> getMembers() async {
 Future getCentersByPin(String pinCode, String date) async {
   try {
     http.Response res = await http.get(
-      genUrlQueryParam(_calenderByPin, {'pincode': pinCode, 'date': date}),
+      genUrlQueryParam(_findByPin, {'pincode': pinCode, 'date': date}),
+      headers: _headers,
+    );
+    if (res.statusCode != 200) {
+      return Future.error(res.body);
+    }
+
+    return json.decode(res.body)['centers'];
+  } catch (e) {
+    Future.error(e);
+  }
+}
+
+Future<List> getCenterByDistrict(String districtId, String date) async {
+  try {
+    http.Response res = await http.get(
+      genUrlQueryParam(
+          _findByDistrict, {'district_id': districtId, 'date': date}),
+      headers: _headers,
+    );
+    if (res.statusCode != 200) {
+      return Future.error(res.body);
+    }
+
+    return json.decode(res.body)['centers'];
+  } catch (e) {
+    Future.error(e);
+  }
+}
+
+Future<List> getStates() async {
+  try {
+    http.Response res = await http.get(
+      genUrl(_getStates),
+      headers: _headers,
+    );
+
+    if (res.statusCode != 200) {
+      return Future.error(res.body);
+    }
+
+    return json.decode(res.body)['states'];
+  } catch (e) {
+    return Future.error(e);
+  }
+}
+
+Future<List> getDistrict(String stateId) async {
+  try {
+    http.Response res = await http.get(
+      genUrl(_getDistrict(stateId)),
       headers: _headers,
     );
     if (res.statusCode != 200) {
@@ -101,8 +151,8 @@ Future getCentersByPin(String pinCode, String date) async {
     }
     print(res.body);
 
-    return json.decode(res.body)['centers'];
+    return json.decode(res.body)['districts'];
   } catch (e) {
-    Future.error(e);
+    return Future.error(e);
   }
 }
