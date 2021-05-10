@@ -1,5 +1,6 @@
 import 'package:cowin_app/http/appHttp.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 
@@ -120,55 +121,62 @@ class _CentersByPinState extends State<CentersByPin> {
       padding: EdgeInsets.all(10),
       child: Form(
         key: _formKey,
-        child: Column(
-          children: [
-            _searchCenters(),
-            ..._centers.map(
-              (e) => Card(
-                child: Container(
-                  padding: EdgeInsets.all(20),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Expanded(
-                        flex: 3,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            _getIconWithText(Icons.local_hospital, e['name']),
-                            _getIconWithText(Icons.location_city, e['address']),
-                            _getIconWithText(
-                                Icons.pin_drop, e['pincode'].toString()),
-                            SizedBox(
-                              height: 10,
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
+        child: Column(children: [
+          _searchCenters(),
+          Container(
+            height: MediaQuery.of(context).size.height * 0.62,
+            child: ListView(
+              children: [
+                ..._centers.map(
+                  (e) => Card(
+                    child: Container(
+                      padding: EdgeInsets.all(20),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Expanded(
+                            flex: 3,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                _getVaccine(e),
-                                SizedBox(width: 10),
-                                _getAge(e),
+                                _getIconWithText(
+                                    Icons.local_hospital, e['name']),
+                                _getIconWithText(
+                                    Icons.location_city, e['address']),
+                                _getIconWithText(
+                                    Icons.pin_drop, e['pincode'].toString()),
+                                SizedBox(
+                                  height: 10,
+                                ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    _getVaccine(e),
+                                    SizedBox(width: 10),
+                                    _getAge(e),
+                                  ],
+                                )
                               ],
-                            )
-                          ],
-                        ),
+                            ),
+                          ),
+                          Expanded(
+                            flex: 1,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                _getAvalability(e),
+                              ],
+                            ),
+                          ),
+                        ],
                       ),
-                      Expanded(
-                        flex: 1,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            _getAvalability(e),
-                          ],
-                        ),
-                      ),
-                    ],
+                    ),
                   ),
-                ),
-              ),
-            )
-          ],
-        ),
+                )
+              ],
+            ),
+          )
+        ]),
       ),
     );
   }
