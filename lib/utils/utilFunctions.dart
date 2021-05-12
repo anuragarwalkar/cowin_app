@@ -1,4 +1,5 @@
 import 'package:cowin_app/storage/localStorage.dart';
+import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 get formatedDate {
@@ -21,4 +22,9 @@ get isTokenValid async {
   }
 
   return false;
+}
+
+void showSnackbar({@required String message, @required BuildContext context}) {
+  final snackBar = SnackBar(content: Text(message));
+  ScaffoldMessenger.of(context).showSnackBar(snackBar);
 }

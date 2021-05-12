@@ -39,15 +39,19 @@ Future<bool> generateOtp(int mobileNumber) async {
         "U2FsdGVkX1/Haasm5iWyBo3n3rDUbdRe+AUrekPbew2T8lpZBleL54n+TX1fd9Rr9xUs/aRKYcVtwcgdD8+zKw==",
     "mobile": mobileNumber
   };
-
-  http.Response res = await http.post(
-    genUrl(_genOtp),
-    headers: _headers,
-    body: json.encode(
-      reqBody,
-    ),
-  );
-  return await ls.setMap('txnId', json.decode(res.body)['txnId']);
+  try {
+    http.Response res = await http.post(
+      genUrl(_genOtp),
+      headers: _headers,
+      body: json.encode(
+        reqBody,
+      ),
+    );
+    print(res.body);
+    return await ls.setMap('txnId', json.decode(res.body)['txnId']);
+  } catch (e) {
+    return Future.error(e);
+  }
 }
 
 Future<dynamic> confirmOtp(String otp) async {
@@ -70,7 +74,7 @@ Future<dynamic> confirmOtp(String otp) async {
     await ls.setMap('token_time', DateTime.now().toString());
     return await ls.setMap('token', parsedRes['token']);
   } catch (e) {
-    Future.error(e);
+    return Future.error(e);
   }
 }
 
@@ -150,7 +154,6 @@ Future<List> getDistrict(String stateId) async {
     if (res.statusCode != 200) {
       return Future.error(res.body);
     }
-    print(res.body);
 
     return json.decode(res.body)['districts'];
   } catch (e) {

@@ -40,14 +40,6 @@ class LocalStorage {
     return null;
   }
 
-  setIsLogin() {
-    _isLoginSscreen = true;
-  }
-
-  bool getIsLoginGen() {
-    return _isLoginSscreen;
-  }
-
   void removeToken() async {
     if (_prefs != null) {
       await _prefs.remove('token');

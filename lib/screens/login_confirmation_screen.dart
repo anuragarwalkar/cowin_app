@@ -6,6 +6,7 @@ import 'package:cowin_app/screens/first_screen.dart';
 import 'package:cowin_app/screens/home_screen.dart';
 import 'package:cowin_app/storage/localStorage.dart';
 import 'package:cowin_app/utils/colors.dart';
+import 'package:cowin_app/utils/utilFunctions.dart';
 import 'package:cowin_app/widgets/appPinCodeFields.dart';
 import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
@@ -22,6 +23,7 @@ class LoginConfirmationScreen extends StatefulWidget {
 class _LoginConfirmationScreenState extends State<LoginConfirmationScreen> {
   StreamController<ErrorAnimationType> _errorController;
   bool _hasError = false;
+  TextEditingController _textEditingController = TextEditingController();
 
   // String _errorMessage;
   Digest _otp;
@@ -45,7 +47,7 @@ class _LoginConfirmationScreenState extends State<LoginConfirmationScreen> {
         } else {
           if (_timer != null) {
             _timer.cancel();
-            _hasError = true;
+            // _hasError = true;
           }
         }
       });
@@ -83,17 +85,27 @@ class _LoginConfirmationScreenState extends State<LoginConfirmationScreen> {
     super.initState();
   }
 
-  _getnerateOtp() async {
+  _getnerateOtp({resend = false}) async {
+    _textEditingController.clear();
     _startTimer();
     int phone = ls.getInt('phone');
 
-    if (phone != null && !ls.getIsLoginGen()) {
+    if (phone != null) {
       await generateOtp(phone);
+    }
+    if (resend) {
+      showSnackbar(
+        context: context,
+        message: 'OTP resent on your phone +91-${phone.toString()}',
+      );
     }
   }
 
   _confirmOtp() async {
     if (_otp != null) {
+      this.setState(() {
+        _hasError = false;
+      });
       try {
         var res = await confirmOtp(_otp.toString());
         if (res == true) {
@@ -101,6 +113,10 @@ class _LoginConfirmationScreenState extends State<LoginConfirmationScreen> {
               .pushNamedAndRemoveUntil(HomeScreen.routeName, (route) => false);
         }
       } catch (e) {
+        _errorController.add(ErrorAnimationType.shake);
+        this.setState(() {
+          _hasError = true;
+        });
         print(e);
       }
     }
@@ -133,7 +149,7 @@ class _LoginConfirmationScreenState extends State<LoginConfirmationScreen> {
             ),
             if (ls.getInt('phone') != null)
               Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-                Text(ls.getInt('phone').toString()),
+                Text('+91-${ls.getInt('phone').toString()}'),
                 TextButton(
                   onPressed: _navigateToLogin,
                   child: Text('Edit Phone'),
@@ -143,6 +159,7 @@ class _LoginConfirmationScreenState extends State<LoginConfirmationScreen> {
               height: 50,
             ),
             AppPinCodeFields(
+              editingController: _textEditingController,
               context: context,
               errorController: _errorController,
               onChanged: _onChanged,
@@ -167,7 +184,7 @@ class _LoginConfirmationScreenState extends State<LoginConfirmationScreen> {
               ),
             ),
             TextButton(
-              onPressed: _getnerateOtp,
+              onPressed: () => _getnerateOtp(resend: true),
               child: Text('Resend OTP'),
             )
           ],
