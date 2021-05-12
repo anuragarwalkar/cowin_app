@@ -1,6 +1,7 @@
 import 'package:cowin_app/http/appHttp.dart';
 import 'package:cowin_app/utils/utilFunctions.dart';
 import 'package:cowin_app/widgets/appCentersCard.dart';
+import 'package:cowin_app/widgets/appSpinner.dart';
 import 'package:flutter/material.dart';
 
 class CentersByDistrict extends StatefulWidget {
@@ -15,6 +16,8 @@ class _CentersByDistrictState extends State<CentersByDistrict> {
 
   String _selectedStateId;
   String _selectedDistrictId;
+  bool _showLoader = true;
+
   @override
   void initState() {
     initData().then((res) => null);
@@ -44,13 +47,26 @@ class _CentersByDistrictState extends State<CentersByDistrict> {
     this.setState(() {
       _selectedDistrictId = val;
     });
-    var centers = await getCenterByDistrict(val, formatedDate);
+    await _fetchCenters(val);
+  }
+
+  _fetchCenters(String center) async {
+    this.setState(() {
+      _centers = [];
+      _showLoader = true;
+    });
+    var centers = await getCenterByDistrict(center, formatedDate);
     this.setState(() {
       _centers = centers;
+      _showLoader = false;
     });
   }
 
-  _onPressed() {}
+  _onPressed() async {
+    if (_selectedDistrictId != null) {
+      await _fetchCenters(_selectedDistrictId);
+    }
+  }
 
   List<Widget> _searchByDistrict() {
     return [
@@ -117,12 +133,14 @@ class _CentersByDistrictState extends State<CentersByDistrict> {
           if (_centers.isNotEmpty)
             Container(
               height: MediaQuery.of(context).size.height / 2,
-              child: ListView.builder(
-                itemCount: _centers.length,
-                itemBuilder: (context, index) {
-                  return AppCentersCard(_centers[index]);
-                },
-              ),
+              child: _showLoader && _selectedDistrictId != null
+                  ? Spinner()
+                  : ListView.builder(
+                      itemCount: _centers.length,
+                      itemBuilder: (context, index) {
+                        return AppCentersCard(_centers[index]);
+                      },
+                    ),
             )
         ],
       )),

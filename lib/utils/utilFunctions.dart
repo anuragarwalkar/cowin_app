@@ -11,9 +11,10 @@ get isTokenValid async {
 
   if (savedTokenDate != null) {
     DateTime savedDate = DateTime.parse(savedTokenDate);
-    bool isValid = DateTime.now().difference(savedDate).inMinutes <= 10;
-    if (isValid) {
-      return isValid;
+    int diffInTime = DateTime.now().difference(savedDate).inMinutes;
+
+    if (diffInTime <= 14) {
+      return true;
     } else {
       ls.removeToken();
     }

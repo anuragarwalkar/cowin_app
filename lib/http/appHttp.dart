@@ -80,6 +80,7 @@ Future<dynamic> getMembers() async {
       genUrl(_beneficiaries),
       headers: _headers,
     );
+
     if (res.statusCode != 200) {
       return Future.error(res.body);
     }
@@ -119,7 +120,7 @@ Future<List> getCenterByDistrict(String districtId, String date) async {
 
     return json.decode(res.body)['centers'];
   } catch (e) {
-    Future.error(e);
+    return Future.error(e);
   }
 }
 
