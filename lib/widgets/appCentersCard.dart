@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class AppCentersCard extends StatelessWidget {
-  Map item;
+  final Map item;
   AppCentersCard(this.item);
 
   List<Widget> _getAvalability(Map item) {
