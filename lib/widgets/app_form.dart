@@ -7,6 +7,7 @@ class AppForm extends StatelessWidget {
   final List photoIdTypes;
   final TextEditingController photoIdNumber;
   final TextEditingController nameController;
+  final TextEditingController birthDateController;
   final Function onGenderChange;
   final List genders;
   final String selectedGender;
@@ -23,6 +24,7 @@ class AppForm extends StatelessWidget {
     @required this.genders,
     @required this.selectedGender,
     @required this.formSubmit,
+    @required this.birthDateController,
   });
 
   @override
@@ -101,10 +103,7 @@ class AppForm extends StatelessWidget {
                       : 'Please select valid Year of birth';
                 },
                 keyboardType: TextInputType.number,
-                onSaved: (String value) {
-                  // This optional block of code can be used to run
-                  // code when the user saves the form.
-                },
+                controller: birthDateController,
               ),
               ListTile(
                 contentPadding: EdgeInsets.all(0),
@@ -138,7 +137,9 @@ class AppForm extends StatelessWidget {
                 height: 20,
               ),
               ElevatedButton(
-                onPressed: formSubmit,
+                onPressed: () {
+                  formSubmit(context);
+                },
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 60),
                   child: Text(

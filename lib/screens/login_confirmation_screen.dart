@@ -109,6 +109,9 @@ class _LoginConfirmationScreenState extends State<LoginConfirmationScreen> {
       try {
         var res = await confirmOtp(_otp.toString());
         if (res == true) {
+          if (_timer != null) {
+            _timer.cancel();
+          }
           Navigator.of(context)
               .pushNamedAndRemoveUntil(HomeScreen.routeName, (route) => false);
         }

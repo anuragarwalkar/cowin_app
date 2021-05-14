@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:cowin_app/storage/localStorage.dart';
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 
 String _baseUrl = 'cdn-api.co-vin.in';
@@ -15,6 +16,7 @@ String _getDistrict(String stateId) => 'admin/location/districts/$stateId';
 String _findByDistrict = 'appointment/sessions/public/calendarByDistrict';
 String _getIdTypes = 'registration/beneficiary/idTypes';
 String _getGenderType = 'registration/beneficiary/genders';
+String _benificiaryRegister = 'registration/beneficiary/new';
 
 Uri genUrl(String url) {
   return Uri.https(_baseUrl, 'api/v2/' + url);
@@ -49,7 +51,6 @@ Future<bool> generateOtp(int mobileNumber) async {
         reqBody,
       ),
     );
-    print(res.body);
     return await ls.setMap('txnId', json.decode(res.body)['txnId']);
   } catch (e) {
     return Future.error(e);
@@ -188,8 +189,41 @@ Future<List> getGender() async {
     if (res.statusCode != 200) {
       return Future.error(res.body);
     }
-    print(res.body);
     return json.decode(res.body)['genders'];
+  } catch (e) {
+    return Future.error(e);
+  }
+}
+
+Future<dynamic> registerBenificiary(
+    {@required String name,
+    @required String birthYear,
+    @required int genderId,
+    @required int photoIdType,
+    @required String photoIdNumber}) async {
+  Map reqBody = {
+    "name": name,
+    "birth_year": birthYear,
+    "gender_id": genderId,
+    "photo_id_type": photoIdType,
+    "photo_id_number": photoIdNumber,
+    "comorbidity_ind": "Y",
+    "consent_version": "1"
+  };
+  try {
+    http.Response res = await http.post(
+      genUrl(_benificiaryRegister),
+      headers: _headers,
+      body: json.encode(
+        reqBody,
+      ),
+    );
+
+    Map parsedRes = json.decode(res.body);
+    if (parsedRes['error'] != null) {
+      return Future.error(parsedRes['error']);
+    }
+    return parsedRes['beneficiary_reference_id'];
   } catch (e) {
     return Future.error(e);
   }

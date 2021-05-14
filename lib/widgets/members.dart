@@ -1,18 +1,30 @@
 import 'package:cowin_app/http/appHttp.dart';
+import 'package:cowin_app/utils/home_page_controller.dart';
 import 'package:cowin_app/widgets/appSpinner.dart';
 import 'package:flutter/material.dart';
 
 class Members extends StatefulWidget {
-  Members({Key key}) : super(key: key);
+  final HomePageController controller;
+  Members({Key key, this.controller}) : super(key: key);
   @override
-  _MembersState createState() => _MembersState();
+  _MembersState createState() => _MembersState(controller);
 }
 
 class _MembersState extends State<Members> {
+  _MembersState(HomePageController _controller) {
+    _controller.getMemmbersSub = getMembersFromApi;
+  }
   List<dynamic> _benificiaries = [];
+
   @override
   void initState() {
+    getMembersFromApi();
+    super.initState();
+  }
+
+  getMembersFromApi() {
     getMembers().then((value) {
+      print(value);
       this.setState(() {
         this._benificiaries = value['beneficiaries'];
         _showSpinner = false;
@@ -22,7 +34,6 @@ class _MembersState extends State<Members> {
         _showSpinner = false;
       });
     });
-    super.initState();
   }
 
   Widget _mainColumn() {
