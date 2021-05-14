@@ -17,8 +17,11 @@ class _MembersState extends State<Members> {
         this._benificiaries = value['beneficiaries'];
         _showSpinner = false;
       });
+    }).catchError((err) {
+      this.setState(() {
+        _showSpinner = false;
+      });
     });
-    // TODO: implement initState
     super.initState();
   }
 

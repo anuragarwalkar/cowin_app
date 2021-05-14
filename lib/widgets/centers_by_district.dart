@@ -21,7 +21,7 @@ class _CentersByDistrictState extends State<CentersByDistrict> {
   @override
   void initState() {
     initData().then((res) => null);
-    // TODO: implement initState
+
     super.initState();
   }
 

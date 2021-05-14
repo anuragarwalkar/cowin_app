@@ -13,6 +13,8 @@ String _findByPin = 'appointment/sessions/public/calendarByPin';
 String _getStates = 'admin/location/states';
 String _getDistrict(String stateId) => 'admin/location/districts/$stateId';
 String _findByDistrict = 'appointment/sessions/public/calendarByDistrict';
+String _getIdTypes = 'registration/beneficiary/idTypes';
+String _getGenderType = 'registration/beneficiary/genders';
 
 Uri genUrl(String url) {
   return Uri.https(_baseUrl, 'api/v2/' + url);
@@ -156,6 +158,38 @@ Future<List> getDistrict(String stateId) async {
     }
 
     return json.decode(res.body)['districts'];
+  } catch (e) {
+    return Future.error(e);
+  }
+}
+
+Future<List> getIdTypes() async {
+  try {
+    http.Response res = await http.get(
+      genUrl(_getIdTypes),
+      headers: _headers,
+    );
+    if (res.statusCode != 200) {
+      return Future.error(res.body);
+    }
+
+    return json.decode(res.body)['types'];
+  } catch (e) {
+    return Future.error(e);
+  }
+}
+
+Future<List> getGender() async {
+  try {
+    http.Response res = await http.get(
+      genUrl(_getGenderType),
+      headers: _headers,
+    );
+    if (res.statusCode != 200) {
+      return Future.error(res.body);
+    }
+    print(res.body);
+    return json.decode(res.body)['genders'];
   } catch (e) {
     return Future.error(e);
   }
