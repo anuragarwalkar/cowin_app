@@ -7,23 +7,26 @@ import 'package:http/http.dart' as http;
 
 String _baseUrl = 'cdn-api.co-vin.in';
 
-String _genOtp = 'auth/generateMobileOTP';
-String _conOtp = 'auth/validateMobileOtp';
-String _beneficiaries = 'appointment/beneficiaries';
-String _findByPin = 'appointment/sessions/public/calendarByPin';
-String _getStates = 'admin/location/states';
-String _getDistrict(String stateId) => 'admin/location/districts/$stateId';
-String _findByDistrict = 'appointment/sessions/public/calendarByDistrict';
-String _getIdTypes = 'registration/beneficiary/idTypes';
-String _getGenderType = 'registration/beneficiary/genders';
-String _benificiaryRegister = 'registration/beneficiary/new';
+String _genOtp = 'api/v2/auth/generateMobileOTP';
+String _conOtp = 'api/v2/auth/validateMobileOtp';
+String _beneficiaries = 'api/v2/appointment/beneficiaries';
+String _findByPin = 'api/v2/appointment/sessions/public/calendarByPin';
+String _getStates = 'api/v2/admin/location/states';
+String _getDistrict(String stateId) =>
+    'api/v2/admin/location/districts/$stateId';
+String _findByDistrict =
+    'api/v2/appointment/sessions/public/calendarByDistrict';
+String _getIdTypes = 'api/v2/registration/beneficiary/idTypes';
+String _getGenderType = 'api/v2/registration/beneficiary/genders';
+String _benificiaryRegister = 'api/v2/registration/beneficiary/new';
+String _deleteBenificiary = 'api/v2/registration/beneficiary/delete';
 
 Uri genUrl(String url) {
-  return Uri.https(_baseUrl, 'api/v2/' + url);
+  return Uri.https(_baseUrl, url);
 }
 
 Uri genUrlQueryParam(String url, Map<String, String> queryParam) {
-  return Uri.https(_baseUrl, 'api/v2/' + url, queryParam);
+  return Uri.https(_baseUrl, url, queryParam);
 }
 
 get _headers {
@@ -224,6 +227,31 @@ Future<dynamic> registerBenificiary(
       return Future.error(parsedRes['error']);
     }
     return parsedRes['beneficiary_reference_id'];
+  } catch (e) {
+    return Future.error(e);
+  }
+}
+
+Future<dynamic> deleteBenificiary(String benificiaryRefId) async {
+  Map reqBody = {"beneficiary_reference_id": benificiaryRefId};
+  try {
+    http.Response res = await http.post(
+      genUrl(_deleteBenificiary),
+      headers: _headers,
+      body: json.encode(
+        reqBody,
+      ),
+    );
+    if (res.statusCode != 204) {
+      if (res.statusCode == 400) {
+        Map parsedRes = json.decode(res.body);
+        return Future.error(parsedRes['error']);
+      } else {
+        return Future.error(res.body);
+      }
+    }
+
+    return res.body;
   } catch (e) {
     return Future.error(e);
   }

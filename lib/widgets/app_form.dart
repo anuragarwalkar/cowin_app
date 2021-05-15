@@ -84,6 +84,7 @@ class AppForm extends StatelessWidget {
                   hintText: 'Name',
                   labelText: 'Name *',
                 ),
+                textCapitalization: TextCapitalization.words,
                 validator: (val) {
                   return val != null && val.length > 4
                       ? null
@@ -98,9 +99,15 @@ class AppForm extends StatelessWidget {
                   labelText: 'Year Of Birth*',
                 ),
                 validator: (val) {
-                  return val != null && val.length == 4
-                      ? null
-                      : 'Please select valid Year of birth';
+                  if (val != null && val.length == 4) {
+                    return null;
+                  }
+                  return 'Please select valid Year of birth';
+                },
+                onChanged: (val) {
+                  if (val.length == 4) {
+                    FocusScope.of(context).requestFocus(FocusNode());
+                  }
                 },
                 keyboardType: TextInputType.number,
                 controller: birthDateController,

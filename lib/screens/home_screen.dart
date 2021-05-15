@@ -34,7 +34,8 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
-  _selectGender(val, changeState) {
+  _selectGender(val, changeState, BuildContext ctx) {
+    FocusScope.of(ctx).requestFocus(FocusNode());
     changeState(() {
       _selectedGender = val;
     });
@@ -56,6 +57,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   _onSelctIdType(val, changeState) {
+    FocusScope.of(context).requestFocus(FocusNode());
     changeState(() {
       _selectedIdType = val;
     });
@@ -98,7 +100,7 @@ class _HomeScreenState extends State<HomeScreen> {
             photoIdTypes: _idTypes,
             photoIdNumber: _photoIdNumberController,
             nameController: _nameController,
-            onGenderChange: (val) => _selectGender(val, setstate),
+            onGenderChange: (val) => _selectGender(val, setstate, context),
             genders: _genders,
             selectedGender: _selectedGender,
             formSubmit: _onSubmit,
