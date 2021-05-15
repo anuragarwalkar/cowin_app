@@ -1,5 +1,4 @@
 import 'package:cowin_app/http/appHttp.dart';
-import 'package:cowin_app/screens/login_confirmation_screen.dart';
 import 'package:cowin_app/storage/localStorage.dart';
 import 'package:cowin_app/utils/home_page_controller.dart';
 import 'package:cowin_app/utils/utilFunctions.dart';
@@ -7,6 +6,7 @@ import 'package:cowin_app/widgets/appBottomNavigation.dart';
 import 'package:cowin_app/widgets/app_form.dart';
 import 'package:cowin_app/widgets/available_slots.dart';
 import 'package:cowin_app/widgets/members.dart';
+import 'package:cowin_app/widgets/time_out_dialog.dart';
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -60,47 +60,19 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Future<void> initData() async {
     int tokenTime = tokenTimeDiff;
-    print(840 - tokenTime);
 
-    Future.delayed(Duration(seconds: 840 - tokenTime), () {
-      showDialog(
+    Future.delayed(
+      Duration(seconds: 840 - tokenTime),
+      () {
+        ls.removeToken();
+        showDialog(
           context: context,
           builder: (context) {
-            return AlertDialog(
-              content: Container(
-                height: MediaQuery.of(context).size.height / 9,
-                child: Column(
-                  children: [
-                    Text(
-                      'Totkn will expire soon click Login',
-                      style: TextStyle(color: Colors.redAccent),
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        ElevatedButton(
-                          onPressed: () async {
-                            ls.removeToken();
-                            await generateOtp(ls.getInt('phone'));
-                            Navigator.of(context).pushNamedAndRemoveUntil(
-                              LoginConfirmationScreen.routeName,
-                              (route) => false,
-                            );
-                          },
-                          child: Text('Login'),
-                        )
-                      ],
-                    )
-                  ],
-                ),
-              ),
-            );
-          });
-    });
+            return TimeOutDialog();
+          },
+        );
+      },
+    );
     final idTypes = await getIdTypes();
     final genders = await getGender();
     setState(() {
