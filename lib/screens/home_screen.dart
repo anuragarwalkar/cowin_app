@@ -1,5 +1,8 @@
 import 'package:cowin_app/http/appHttp.dart';
+import 'package:cowin_app/screens/first_screen.dart';
+import 'package:cowin_app/storage/localStorage.dart';
 import 'package:cowin_app/utils/home_page_controller.dart';
+import 'package:cowin_app/utils/utilFunctions.dart';
 import 'package:cowin_app/widgets/appBottomNavigation.dart';
 import 'package:cowin_app/widgets/app_form.dart';
 import 'package:cowin_app/widgets/available_slots.dart';
@@ -56,6 +59,45 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Future<void> initData() async {
+    int tokenTime = tokenTimeDiff;
+    print(840 - tokenTime);
+
+    Future.delayed(Duration(seconds: 840 - tokenTime), () {
+      showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              content: Container(
+                height: MediaQuery.of(context).size.height / 9,
+                child: Column(
+                  children: [
+                    Text(
+                      'Totkn will expire soon click Login',
+                      style: TextStyle(color: Colors.redAccent),
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        ElevatedButton(
+                          onPressed: () async {
+                            ls.removeToken();
+                            Navigator.of(context).pushNamedAndRemoveUntil(
+                                FirstScreen.routeName, (route) => false);
+                          },
+                          child: Text('Login'),
+                        )
+                      ],
+                    )
+                  ],
+                ),
+              ),
+            );
+          });
+    });
     final idTypes = await getIdTypes();
     final genders = await getGender();
     setState(() {

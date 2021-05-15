@@ -7,14 +7,19 @@ get formatedDate {
   return formatter.format(DateTime.now());
 }
 
-get isTokenValid async {
+get tokenTimeDiff {
   String savedTokenDate = ls.getMap('token_time');
-
   if (savedTokenDate != null) {
     DateTime savedDate = DateTime.parse(savedTokenDate);
-    int diffInTime = DateTime.now().difference(savedDate).inMinutes;
+    return DateTime.now().difference(savedDate).inSeconds;
+  }
 
-    if (diffInTime <= 14) {
+  return null;
+}
+
+get isTokenValid async {
+  if (tokenTimeDiff != null) {
+    if (tokenTimeDiff <= 840) {
       return true;
     } else {
       ls.removeToken();

@@ -54,7 +54,6 @@ class _MembersState extends State<Members> {
 
   getMembersFromApi() {
     getMembers().then((value) {
-      print(value);
       this.setState(() {
         this._benificiaries = value['beneficiaries'];
         _showSpinner = false;

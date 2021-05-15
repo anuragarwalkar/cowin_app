@@ -2,7 +2,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class LocalStorage {
   SharedPreferences _prefs;
-  // final bool _isLoginSscreen = false;
 
   init() async {
     return _prefs = await SharedPreferences.getInstance();
