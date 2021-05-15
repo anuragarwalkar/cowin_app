@@ -17,9 +17,8 @@ class _HomeScreenState extends State<HomeScreen> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _birthDateController = TextEditingController();
   final HomePageController myController = HomePageController();
+  final TextEditingController _photoIdNumController = TextEditingController();
 
-  final TextEditingController _photoIdNumberController =
-      TextEditingController();
   List _idTypes = [];
   List _genders = [];
 
@@ -47,6 +46,15 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
   }
 
+  @override
+  void dispose() {
+    _photoIdNumController.dispose();
+    _birthDateController.dispose();
+    _nameController.dispose();
+
+    super.dispose();
+  }
+
   Future<void> initData() async {
     final idTypes = await getIdTypes();
     final genders = await getGender();
@@ -69,7 +77,7 @@ class _HomeScreenState extends State<HomeScreen> {
         String name = _nameController.text;
         int genderId = int.parse(_selectedGender);
         int photoIdType = int.parse(_selectedIdType);
-        String photoIdNumber = _photoIdNumberController.text;
+        String photoIdNumber = _photoIdNumController.text;
         String birthYear = _birthDateController.text;
         await registerBenificiary(
           name: name,
@@ -98,7 +106,7 @@ class _HomeScreenState extends State<HomeScreen> {
             selectedPhotoIdType: _selectedIdType,
             onChangePhotoIdType: (val) => _onSelctIdType(val, setstate),
             photoIdTypes: _idTypes,
-            photoIdNumber: _photoIdNumberController,
+            photoIdNumber: _photoIdNumController,
             nameController: _nameController,
             onGenderChange: (val) => _selectGender(val, setstate, context),
             genders: _genders,
