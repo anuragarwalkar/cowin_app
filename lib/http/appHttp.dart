@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:cowin_app/storage/localStorage.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 
 String _baseUrl = 'cdn-api.co-vin.in';
@@ -41,11 +42,7 @@ get _headers {
 }
 
 Future<bool> generateOtp(int mobileNumber) async {
-  Map reqBody = {
-    "secret":
-        "U2FsdGVkX1/Haasm5iWyBo3n3rDUbdRe+AUrekPbew2T8lpZBleL54n+TX1fd9Rr9xUs/aRKYcVtwcgdD8+zKw==",
-    "mobile": mobileNumber
-  };
+  Map reqBody = {"secret": env['SECRET'], "mobile": mobileNumber};
   try {
     http.Response res = await http.post(
       genUrl(_genOtp),

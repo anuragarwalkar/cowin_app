@@ -1,5 +1,5 @@
 import 'package:cowin_app/http/appHttp.dart';
-import 'package:cowin_app/screens/first_screen.dart';
+import 'package:cowin_app/screens/login_confirmation_screen.dart';
 import 'package:cowin_app/storage/localStorage.dart';
 import 'package:cowin_app/utils/home_page_controller.dart';
 import 'package:cowin_app/utils/utilFunctions.dart';
@@ -85,8 +85,11 @@ class _HomeScreenState extends State<HomeScreen> {
                         ElevatedButton(
                           onPressed: () async {
                             ls.removeToken();
+                            await generateOtp(ls.getInt('phone'));
                             Navigator.of(context).pushNamedAndRemoveUntil(
-                                FirstScreen.routeName, (route) => false);
+                              LoginConfirmationScreen.routeName,
+                              (route) => false,
+                            );
                           },
                           child: Text('Login'),
                         )
