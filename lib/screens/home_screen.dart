@@ -77,6 +77,7 @@ class _HomeScreenState extends State<HomeScreen> {
           birthYear: birthYear,
         );
         myController.getMemmbersSub();
+        _formKey.currentState.reset();
         Navigator.pop(dialogCtx);
       } catch (e) {
         print(e);
@@ -129,12 +130,13 @@ class _HomeScreenState extends State<HomeScreen> {
         selectPage: _selectPage,
         selectedPageIndex: _selectedPageIndex,
       ),
-      floatingActionButton: _idTypes.isNotEmpty && _genders.isNotEmpty
-          ? FloatingActionButton(
-              onPressed: _onAddMember,
-              child: const Icon(Icons.add),
-            )
-          : null,
+      floatingActionButton:
+          _idTypes.isNotEmpty && _genders.isNotEmpty && _selectedPageIndex == 0
+              ? FloatingActionButton(
+                  onPressed: _onAddMember,
+                  child: const Icon(Icons.add),
+                )
+              : null,
     );
   }
 }
