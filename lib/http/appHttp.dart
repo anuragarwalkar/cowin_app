@@ -37,12 +37,16 @@ get _headers {
   return {
     HttpHeaders.contentTypeHeader: applicationJson,
     HttpHeaders.acceptHeader: applicationJson,
-    HttpHeaders.authorizationHeader: token
+    HttpHeaders.authorizationHeader: token,
+    'Origin': 'https://selfregistration.cowin.gov.in'
   };
 }
 
 Future<bool> generateOtp(int mobileNumber) async {
-  Map reqBody = {"secret": env['SECRET'], "mobile": mobileNumber};
+  Map reqBody = {
+    "secret": env['SECRET'],
+    "mobile": mobileNumber,
+  };
   try {
     http.Response res = await http.post(
       genUrl(_genOtp),
@@ -60,7 +64,10 @@ Future<bool> generateOtp(int mobileNumber) async {
 Future<dynamic> confirmOtp(String otp) async {
   String txnId = ls.getMap('txnId');
 
-  Map reqBody = {"otp": otp, "txnId": txnId};
+  Map reqBody = {
+    "otp": otp,
+    "txnId": txnId,
+  };
   try {
     http.Response res = await http.post(
       genUrl(_conOtp),
@@ -69,9 +76,8 @@ Future<dynamic> confirmOtp(String otp) async {
         reqBody,
       ),
     );
-
     Map parsedRes = json.decode(res.body);
-    if (parsedRes['error'] != null) {
+    if (parsedRes['error'] != null || parsedRes['token'] == null) {
       return Future.error(parsedRes['error']);
     }
     await ls.setMap('token_time', DateTime.now().toString());

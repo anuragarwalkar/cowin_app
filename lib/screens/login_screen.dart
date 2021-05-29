@@ -3,6 +3,7 @@ import 'package:cowin_app/screens/login_confirmation_screen.dart';
 import 'package:cowin_app/storage/localStorage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:sms_autofill/sms_autofill.dart';
 
 class LoginScreen extends StatefulWidget {
   static const routeName = 'login';
@@ -15,18 +16,15 @@ class _LoginScreenState extends State<LoginScreen> {
   TextEditingController phoneNumber = TextEditingController(
       text: ls.getInt('phone') != null ? ls.getInt('phone').toString() : null);
 
-  _validator(dynamic text) {
-    if (text.length < 10) {
-      return 'Please add valid phone number';
-    }
-
-    return null;
-  }
-
   _onLogin() async {
     if (_formKey.currentState.validate()) {
       try {
-        int phone = int.parse(phoneNumber.value.text);
+        String validPhoneNumber = phoneNumber.value.text;
+        if (phoneNumber.value.text.contains('+91')) {
+          validPhoneNumber = phoneNumber.value.text.replaceFirst('+91', '');
+          print(validPhoneNumber);
+        }
+        int phone = int.parse(validPhoneNumber);
         var res = await generateOtp(phone);
         if (res) {
           await ls.setInt('phone', phone);
@@ -61,35 +59,36 @@ class _LoginScreenState extends State<LoginScreen> {
             SizedBox(
               height: 50,
             ),
-            TextFormField(
-              validator: (val) => _validator(val),
+            PhoneFieldHint(
               controller: phoneNumber,
               decoration: InputDecoration(
                 labelText: 'Your Phone Number',
                 icon: Icon(Icons.phone),
                 hintText: 'Your Mobile',
               ),
-              keyboardType: TextInputType.number,
               inputFormatters: <TextInputFormatter>[
                 FilteringTextInputFormatter.digitsOnly
               ],
-              onFieldSubmitted: (String val) => _onLogin(),
+              autoFocus: true,
             ),
             SizedBox(
               height: 50,
             ),
             ElevatedButton(
-                onPressed: _onLogin,
-                child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 80, vertical: 10),
-                  child: Text(
-                    'Get OTP',
-                    style: TextStyle(
-                      fontSize: 15,
-                    ),
+              onPressed: _onLogin,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 80,
+                  vertical: 10,
+                ),
+                child: Text(
+                  'Get OTP',
+                  style: TextStyle(
+                    fontSize: 15,
                   ),
-                )),
+                ),
+              ),
+            ),
           ],
         ),
       ),

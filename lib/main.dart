@@ -11,7 +11,7 @@ void main() async {
   try {
     await DotEnv.load(fileName: ".env");
   } catch (e) {
-    throw Exception("Include .env file in the root of the app");
+    throw Exception("Please include .env file in the root of the app");
   }
   await ls.init();
   String initialRoute =

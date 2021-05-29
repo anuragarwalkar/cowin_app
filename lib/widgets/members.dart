@@ -8,7 +8,11 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 
 class Members extends StatefulWidget {
   final HomePageController controller;
-  Members({Key key, this.controller}) : super(key: key);
+  Members({
+    Key key,
+    this.controller,
+  }) : super(key: key);
+
   @override
   _MembersState createState() => _MembersState(controller);
 }
