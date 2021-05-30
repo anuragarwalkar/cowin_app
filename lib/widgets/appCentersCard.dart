@@ -6,35 +6,44 @@ class AppCentersCard extends StatelessWidget {
 
   List<Widget> _getAvalability(Map item) {
     List sessions = item['sessions'];
-    int slots = sessions.first['available_capacity'];
-    String label = slots > 0 ? 'Oepn' : 'Booked';
+
+    Map data = {'18': 0, '45': 0};
+
+    sessions.forEach((element) {
+      int count = data[element['min_age_limit']];
+      int capacity = element['available_capacity'];
+      if (count != null && capacity != null) {
+        data[element['min_age_limit']] = count + capacity;
+      }
+    });
+
     return [
       Chip(
-        label: Text(label),
-        backgroundColor: slots > 0 ? Colors.green : Colors.red,
+        label: Text('Age 18+ Slots 0'),
+        backgroundColor: data['18'] > 0 ? Colors.green : Colors.red,
       ),
-      if (slots > 0)
-        Chip(
-          label: Text('Slots ${slots.toString()}'),
-          backgroundColor: Colors.green,
-        ),
+      Chip(
+        label: Text('Age 45+ Slots 0'),
+        backgroundColor: data['45'] > 0 ? Colors.green : Colors.red,
+      )
     ];
   }
 
-  Widget _getVaccine(Map item) {
+  List<Widget> _getVaccine(Map item) {
     List sessions = item['sessions'];
-    String vaccine = sessions.first['vaccine'];
-    return Chip(
-      label: Text(vaccine),
-    );
-  }
+    var vaccines = <String>{};
+    sessions.forEach((session) {
+      vaccines.add(session['vaccine']);
+    });
 
-  Widget _getAge(Map item) {
-    List sessions = item['sessions'];
-    int age = sessions.first['min_age_limit'];
-    return Chip(
-      label: Text('Age $age +'),
-    );
+    return vaccines
+        .map((vaccine) => Container(
+              margin: EdgeInsets.only(right: 10),
+              child: Chip(
+                label: Text(vaccine),
+              ),
+            ))
+        .toList();
   }
 
   Widget _getIconWithText(IconData icon, String text) {
@@ -61,40 +70,37 @@ class AppCentersCard extends StatelessWidget {
     return Card(
       child: Container(
         padding: EdgeInsets.all(20),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        child: Column(
           children: [
-            Expanded(
-              flex: 3,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  _getIconWithText(Icons.local_hospital, item['name']),
-                  _getIconWithText(Icons.location_city, item['address']),
-                  _getIconWithText(Icons.pin_drop, item['pincode'].toString()),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(
+                  flex: 3,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      _getVaccine(item),
-                      SizedBox(width: 10),
-                      _getAge(item),
+                      _getIconWithText(Icons.local_hospital, item['name']),
+                      _getIconWithText(Icons.location_city, item['address']),
+                      _getIconWithText(
+                          Icons.pin_drop, item['pincode'].toString()),
                     ],
-                  )
-                ],
-              ),
+                  ),
+                ),
+                Expanded(
+                  flex: 2,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      ..._getAvalability(item),
+                    ],
+                  ),
+                ),
+              ],
             ),
-            Expanded(
-              flex: 1,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  ..._getAvalability(item),
-                ],
-              ),
-            ),
+            Row(
+              children: _getVaccine(item),
+            )
           ],
         ),
       ),
