@@ -69,7 +69,6 @@ class _LoginScreenState extends State<LoginScreen> {
               inputFormatters: <TextInputFormatter>[
                 FilteringTextInputFormatter.digitsOnly
               ],
-              // autoFocus: true,
             ),
             SizedBox(
               height: 50,
